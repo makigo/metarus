@@ -1,0 +1,89 @@
+#!/bin/bash
+#
+# 2016 (c) iMakhonin (Igor Makhonin)
+# Email: <work.makhonin@gmail.com>
+#
+
+NAME="Metarus"
+APPNAME="metarus"
+AUTHOR="Игорь Махонин"
+VERSION="1.5"
+RELEASE="12.08.2016"
+EMAIL="work.makhonin@gmail.com"
+NOAAURL="http://tgftp.nws.noaa.gov/data/observations/metar"
+STATION="stations"
+DECODED="decoded"
+TREND="trend"
+NOAAURL_NEW="http://weather.noaa.gov/weather/current/"
+LOGFILE="/var/log/metarus.log"
+TIME=`date +%F\ %H:%M:%S`
+TYPE="<info>"
+STARTCOMM="$TIME $NAME: $TYPE Starting collect meteo data";
+ENDCOMM="$TIMEEND $NAME: $TYPE Updating meteo data DONE!";
+SEPARATOR="-------------------------------------------------------------------";
+
+if [ "$1" == "-h" ] || [ "$1" == "--help" ] && [ -z "$2" ]; then
+  echo "$NAME $VERSION, программа получения погодных данных в России по сети."
+  echo "Использование: $APPNAME [КЛЮЧ]... [CODE]..."
+  echo
+  echo "  -t,  --temp       Темперетура."
+  echo "  -r,  --raw        Сырые данные."
+  echo "  -a,  --all        Полные данные."
+  echo "  -c,  --city       Список доступных городов в соответствии с кодами."
+  echo "       --help       Показать эту справку и выйти."
+  echo "       --version    Показать информацию о версии и выйти."
+  echo
+  echo "Об ошибках в «$APPNAME» сообщайте по адресу <$EMAIL>"
+  exit 1
+
+elif [ "$1" == "-v" ] || [ "$1" == "--version" ] && [ -z "$2" ]; then
+  echo "Версия: $VERSION, дата релиза: $RELEASE"
+  exit 1
+
+elif [ "$1" == "-c" ] || [ "$1" == "--city" ] && [ -z "$2" ]; then
+  echo "RUSSIA:"
+  echo "UNAA - Abakan; URSS - Adler; UHMA - Anadyr; URKA - Anapa / Vitiazevo; ULAA - Arhangel'Sk; URWA - Astrakhan;"
+  echo "UNBB - Barnaul; UIBB - Bratsk / Irkutsk; UUBP - Brjansk; USCC - Chelyabinsk-Balandino; UIAA - Chita; UELL - Cul'Man;"
+  echo "USSS - Ekaterinburg; URWI - Elista; UHHH - Habarovsk; USHH - Hanty-Mansijsk; UIII - Irkutsk; UEEE - Jakutsk;"
+  echo "UMKK - Kaliningrad/Khrabrovo Airport; UWKD - Kazan'; UNEE - Kemerovo; URKK - Krasnodar; UHMM - Magadan; URMM - Mineral'Nye Vody;"
+  echo "UERR - Mirny; UUDD - Moscow / Domodedovo; UUEE - Moscow / Sheremet'Ye; UUWW - Moscow / Vnukovo;"
+  echo "ULMM - Murmansk; URMN - Nalchik; USNN - Nizhnevartovsk; UWGG - Nizhny Novgorod/Strigino; UNWW - Novokuznetsk; UNOO - Omsk;"
+  echo "UWOO - Orenburg / Tsentralny; UWPP - Penza; USPP - Perm'/Bolshoe Savino; UHPP - Petropavlovsk-Kamchatskij; UERP - Polyarny;"
+  echo "URRR - Rostov-Na-Donu; UWWW - Samara; UWSS - Saratov / Tsentralny; ULLI - St. Peterburg; URMT - Stavropol / Shpakovskoye;"
+  echo "USRR - Surgut; UUYY - Syktyvkar; UEST - Tiksi; UUEM - Tver; UWUU - Ufa; UIUU - Ulan-Ude; UWLW - Ulyanovsk; ULOL - Velikie Luki;"
+  echo "UHWW - Vladivostok; URWW - Volgograd; ULWW - Vologda; UUOO - Voronez; UHSS - Yuzhno-Sakhalinsk;"
+  exit 1
+
+elif [ "$1" == "-a" ] || [ "$1" == "--all" ] && [ ! -z "$2" ]; then
+  AIRPORT=`echo "$2" | sed 's/[[:lower:]]/\u&/g'`
+  curl --silent $NOAAURL/$DECODED/$AIRPORT.TXT
+
+elif [ "$1" == "-r" ] || [ "$1" == "--raw" ] && [ ! -z "$2" ]; then
+  AIRPORT=`echo "$2" | sed 's/[[:lower:]]/\u&/g'`
+  curl --silent $NOAAURL/$STATION/$AIRPORT.TXT | grep $AIRPORT
+
+elif [ "$1" == "-n" ] || [ "$1" == "--trend" ] && [ ! -z "$2" ]; then
+  AIRPORT=`echo "$2" | sed 's/[[:lower:]]/\u&/g'`
+  curl --silent $NOAAURL/$TREND/$AIRPORT.TREND
+
+elif [ "$1" == "-t" ] || [ "$1" == "--temp" ] && [ ! -z "$2" ]; then
+  AIRPORT=`echo "$2" | sed 's/[[:lower:]]/\u&/g'`
+  temp=`curl --silent $NOAAURL/$DECODED/$AIRPORT.TXT | grep Temp | cut -d "(" -f2 | cut -d ")" -f1 | cut -d " " -f1`
+  echo $temp
+
+elif [ "$1" == "-d" ] || [ "$1" == "--decode" ] && [ ! -z "$2" ]; then
+  AIRPORT=`echo "$2" | sed 's/[[:lower:]]/\u&/g'`
+  temp=`curl --silent $NOAAURL/$DECODED/$AIRPORT.TXT | awk -F":" '/Temperature/ {a=($2-32)/1.8;  print a}'`
+  echo "scale=2;($temp-32)/1.8" | bc -l
+  echo $temp
+
+elif [ "$1" == "-o" ] || [ "$1" == "--old" ] && [ ! -z "$2" ]; then
+  AIRPORT=`echo "$2" | sed 's/[[:lower:]]/\u&/g'`
+  temp=`curl --silent $NOAAURL/$DECODED/$AIRPORT.TXT | awk '/Temperature/ {a=($2-32)/1.8;  print a}'`
+  if [ "$temp" > "*.4" ]; then
+    t=`echo "$temp + 1" | bc`
+  fi
+  echo ${t%.*}
+else
+  echo Используйте помощь: --help
+fi
