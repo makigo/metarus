@@ -1,89 +1,178 @@
 #!/bin/bash
 #
-# 2016 (c) iMakhonin (Igor Makhonin)
+# Author: iMakhonin aka Makigo
 # Email: <work.makhonin@gmail.com>
 #
+####
 
 NAME="Metarus"
 APPNAME="metarus"
-AUTHOR="Игорь Махонин"
-VERSION="1.5"
-RELEASE="12.08.2016"
+AUTHOR="Igor Makhonin"
+VERSION="2.0"
+RELEASE="20.12.2016"
 EMAIL="work.makhonin@gmail.com"
+W_BASE="NOAA"
 NOAAURL="http://tgftp.nws.noaa.gov/data/observations/metar"
 STATION="stations"
 DECODED="decoded"
 TREND="trend"
 NOAAURL_NEW="http://weather.noaa.gov/weather/current/"
-LOGFILE="/var/log/metarus.log"
-TIME=`date +%F\ %H:%M:%S`
-TYPE="<info>"
-STARTCOMM="$TIME $NAME: $TYPE Starting collect meteo data";
-ENDCOMM="$TIMEEND $NAME: $TYPE Updating meteo data DONE!";
-SEPARATOR="-------------------------------------------------------------------";
+ERROR="$NAME pattern not found in $W_BASE data."
+HELP="echo Используйте помощь: --help"
+SORRY="echo -e Извините, но остальные города пока не внесены в базу кодов.\nЕсли вы знаете код города, введите его используя \"$APPNAME -d code\""
+NODATA="---"
+ZERO="0"
+
 
 if [ "$1" == "-h" ] || [ "$1" == "--help" ] && [ -z "$2" ]; then
-  echo "$NAME $VERSION, программа получения погодных данных в России по сети."
+  echo "$NAME v$VERSION, программа получения погодных данных в России по сети."
   echo "Использование: $APPNAME [КЛЮЧ]... [CODE]..."
   echo
-  echo "  -t,  --temp       Темперетура."
-  echo "  -r,  --raw        Сырые данные."
-  echo "  -a,  --all        Полные данные."
-  echo "  -c,  --city       Список доступных городов в соответствии с кодами."
-  echo "       --help       Показать эту справку и выйти."
-  echo "       --version    Показать информацию о версии и выйти."
+  echo "  Использование:"
+  echo "  -t,  --temp=code    Только темперетура."
+  echo "  -d,  --decode=code  Декодированные данные."
+  echo "  -c,  --city=ru      Список доступных городов в соответствии с кодами."
+  echo
+  echo "       --help         Показать эту справку и выйти."
+  echo "       --version      Показать информацию о версии и выйти."
+  echo
+  echo "  Примеры:"
+  echo "  $APPNAME -d uuee     Вывод декодированной информации о погоде в Москве."
+  echo "  $APPNAME -c ru       Вывод информации о кодах Российских городов."
   echo
   echo "Об ошибках в «$APPNAME» сообщайте по адресу <$EMAIL>"
   exit 1
+
 
 elif [ "$1" == "-v" ] || [ "$1" == "--version" ] && [ -z "$2" ]; then
   echo "Версия: $VERSION, дата релиза: $RELEASE"
   exit 1
 
-elif [ "$1" == "-c" ] || [ "$1" == "--city" ] && [ -z "$2" ]; then
-  echo "RUSSIA:"
-  echo "UNAA - Abakan; URSS - Adler; UHMA - Anadyr; URKA - Anapa / Vitiazevo; ULAA - Arhangel'Sk; URWA - Astrakhan;"
-  echo "UNBB - Barnaul; UIBB - Bratsk / Irkutsk; UUBP - Brjansk; USCC - Chelyabinsk-Balandino; UIAA - Chita; UELL - Cul'Man;"
-  echo "USSS - Ekaterinburg; URWI - Elista; UHHH - Habarovsk; USHH - Hanty-Mansijsk; UIII - Irkutsk; UEEE - Jakutsk;"
-  echo "UMKK - Kaliningrad/Khrabrovo Airport; UWKD - Kazan'; UNEE - Kemerovo; URKK - Krasnodar; UHMM - Magadan; URMM - Mineral'Nye Vody;"
-  echo "UERR - Mirny; UUDD - Moscow / Domodedovo; UUEE - Moscow / Sheremet'Ye; UUWW - Moscow / Vnukovo;"
-  echo "ULMM - Murmansk; URMN - Nalchik; USNN - Nizhnevartovsk; UWGG - Nizhny Novgorod/Strigino; UNWW - Novokuznetsk; UNOO - Omsk;"
-  echo "UWOO - Orenburg / Tsentralny; UWPP - Penza; USPP - Perm'/Bolshoe Savino; UHPP - Petropavlovsk-Kamchatskij; UERP - Polyarny;"
-  echo "URRR - Rostov-Na-Donu; UWWW - Samara; UWSS - Saratov / Tsentralny; ULLI - St. Peterburg; URMT - Stavropol / Shpakovskoye;"
-  echo "USRR - Surgut; UUYY - Syktyvkar; UEST - Tiksi; UUEM - Tver; UWUU - Ufa; UIUU - Ulan-Ude; UWLW - Ulyanovsk; ULOL - Velikie Luki;"
-  echo "UHWW - Vladivostok; URWW - Volgograd; ULWW - Vologda; UUOO - Voronez; UHSS - Yuzhno-Sakhalinsk;"
-  exit 1
+
+elif [ "$1" == "-c" ] || [ "$1" == "--city" ] && [ ! -z "$2" ]; then
+  if [ "$2" == "ru" ]; then
+    echo "RUSSIA:"
+    echo "UNAA - Abakan; URSS - Adler; UHMA - Anadyr; URKA - Anapa / Vitiazevo; ULAA - Arhangel'Sk; URWA - Astrakhan;"
+    echo "UNBB - Barnaul; UIBB - Bratsk / Irkutsk; UUBP - Brjansk; USCC - Chelyabinsk-Balandino; UIAA - Chita; UELL - Cul'Man;"
+    echo "USSS - Ekaterinburg; URWI - Elista; UHHH - Habarovsk; USHH - Hanty-Mansijsk; UIII - Irkutsk; UEEE - Jakutsk;"
+    echo "UMKK - Kaliningrad/Khrabrovo Airport; UWKD - Kazan'; UNEE - Kemerovo; URKK - Krasnodar; UHMM - Magadan; URMM - Mineral'Nye Vody;"
+    echo "UERR - Mirny; UUDD - Moscow / Domodedovo; UUEE - Moscow / Sheremet'Ye; UUWW - Moscow / Vnukovo;"
+    echo "ULMM - Murmansk; URMN - Nalchik; USNN - Nizhnevartovsk; UWGG - Nizhny Novgorod/Strigino; UNWW - Novokuznetsk; UNOO - Omsk;"
+    echo "UWOO - Orenburg / Tsentralny; UWPP - Penza; USPP - Perm'/Bolshoe Savino; UHPP - Petropavlovsk-Kamchatskij; UERP - Polyarny;"
+    echo "URRR - Rostov-Na-Donu; UWWW - Samara; UWSS - Saratov / Tsentralny; ULLI - St. Peterburg; URMT - Stavropol / Shpakovskoye;"
+    echo "USRR - Surgut; UUYY - Syktyvkar; UEST - Tiksi; UUEM - Tver; UWUU - Ufa; UIUU - Ulan-Ude; UWLW - Ulyanovsk; ULOL - Velikie Luki;"
+    echo "UHWW - Vladivostok; URWW - Volgograd; ULWW - Vologda; UUOO - Voronez; UHSS - Yuzhno-Sakhalinsk;"
+    exit 1
+  else
+    $SORRY
+    exit 1
+  fi
+
 
 elif [ "$1" == "-a" ] || [ "$1" == "--all" ] && [ ! -z "$2" ]; then
   AIRPORT=`echo "$2" | sed 's/[[:lower:]]/\u&/g'`
-  curl --silent $NOAAURL/$DECODED/$AIRPORT.TXT
+  pattern=`wget -q -O- $NOAAURL/$DECODED/$AIRPORT.TXT`
+  if [ "$pattern" == "" ]; then
+    echo "$ERROR"
+    exit 1
+  else
+    wget -q -O- $NOAAURL/$DECODED/$AIRPORT.TXT
+  fi
+
 
 elif [ "$1" == "-r" ] || [ "$1" == "--raw" ] && [ ! -z "$2" ]; then
   AIRPORT=`echo "$2" | sed 's/[[:lower:]]/\u&/g'`
-  curl --silent $NOAAURL/$STATION/$AIRPORT.TXT | grep $AIRPORT
+  pattern=`wget -q -O- $NOAAURL/$STATION/$AIRPORT.TXT`
+  if [ "$pattern" == "" ]; then
+    echo "$ERROR"
+    exit 1
+  else
+    wget -q -O- $NOAAURL/$STATION/$AIRPORT.TXT | grep $AIRPORT
+  fi
 
-elif [ "$1" == "-n" ] || [ "$1" == "--trend" ] && [ ! -z "$2" ]; then
+
+elif [ "$1" == "-T" ] || [ "$1" == "--trend" ] && [ ! -z "$2" ]; then
   AIRPORT=`echo "$2" | sed 's/[[:lower:]]/\u&/g'`
-  curl --silent $NOAAURL/$TREND/$AIRPORT.TREND
+  pattern=`wget -q -O- $NOAAURL/$TREND/$AIRPORT.TREND`
+  if [ "$pattern" == "" ]; then
+    echo "$ERROR"
+    exit 1
+  else
+    wget -q -O- $NOAAURL/$TREND/$AIRPORT.TREND
+  fi
+
 
 elif [ "$1" == "-t" ] || [ "$1" == "--temp" ] && [ ! -z "$2" ]; then
   AIRPORT=`echo "$2" | sed 's/[[:lower:]]/\u&/g'`
-  temp=`curl --silent $NOAAURL/$DECODED/$AIRPORT.TXT | grep Temp | cut -d "(" -f2 | cut -d ")" -f1 | cut -d " " -f1`
-  echo $temp
+  pattern=`wget -q -O- $NOAAURL/$DECODED/$AIRPORT.TXT`
+  if [ "$pattern" == "" ]; then
+    echo "$ERROR"
+    exit 1
+  else
+    wget -q -O- $NOAAURL/$DECODED/$AIRPORT.TXT | awk -F" " '/Temperature/ {print $4}' | sed 's/(//g'
+  fi
+
 
 elif [ "$1" == "-d" ] || [ "$1" == "--decode" ] && [ ! -z "$2" ]; then
   AIRPORT=`echo "$2" | sed 's/[[:lower:]]/\u&/g'`
-  temp=`curl --silent $NOAAURL/$DECODED/$AIRPORT.TXT | awk -F":" '/Temperature/ {a=($2-32)/1.8;  print a}'`
-  echo "scale=2;($temp-32)/1.8" | bc -l
-  echo $temp
+  pattern=`wget -q -O- $NOAAURL/$DECODED/$AIRPORT.TXT`
 
-elif [ "$1" == "-o" ] || [ "$1" == "--old" ] && [ ! -z "$2" ]; then
-  AIRPORT=`echo "$2" | sed 's/[[:lower:]]/\u&/g'`
-  temp=`curl --silent $NOAAURL/$DECODED/$AIRPORT.TXT | awk '/Temperature/ {a=($2-32)/1.8;  print a}'`
-  if [ "$temp" > "*.4" ]; then
-    t=`echo "$temp + 1" | bc`
+  if [ "$pattern" == "" ]; then
+    echo "$ERROR"
+    exit 1
+  else
+  # start=`date +%s`
+    wget -q -O /tmp/$AIRPORT.TXT $NOAAURL/$DECODED/$AIRPORT.TXT
+    d="cat /tmp/$AIRPORT.TXT"
+    station=`exec $d | sed -n "1p" | cut -d "(" -f1`
+    mdate=`exec $d | sed -n "2p" | awk -F"-" '{print $1}'`
+    mtime=`exec $d | sed -n "2p" | awk -F"/" '{print $2}' | awk -F" " '{print $2}' | sed 's/^\(..\)/\1:/'`
+    wind_d=`exec $d | sed -n "3p" | sed 's/(//g' | sed 's/)//g' | awk -F" " '{print $5 "° (" $4 ")"}' | sed 's/^[0]*//'`
+    wind_s=`exec $d | sed -n "3p" | awk -F" " '{a=($8*0.44704); print a}'`
+    wind_g=`exec $d | sed -n "3p" | awk -F" " '{a=($14*0.44704); print a}'`
+    visib=`exec $d | awk -F":" '/Visibility/ {print $2}' | grep -E -o "[0-9]+" | awk '{a=$1*1.60934; print a}'`
+    temp=`exec $d | awk -F" " '/Temperature/ {print $4}' | sed 's/(//g'`
+    dew_p=`exec $d | awk -F" " '/Dew/ {print $5}' | sed 's/(//g'`
+    pres=`exec $d | awk -F" " '/Pressure/ {print $6}' | sed 's/(//g' | awk '{a=$1*0.750062; print a}'`
+    humi=`exec $d | awk -F" " '/Humidity/ {print $3}'`
+    cloud=`exec $d | awk -F" " '/Sky/ {print $3 " " $4}'`
+    weath=`exec $d | awk -F" " '/Weather/ {print $2 " " $3}'`
+    rm -f /tmp/$AIRPORT.TXT
+
+    [ "$station" == "" ] && statiom="$NODATA"
+    [ "$mdate" == "" ] && mdate="$ZERO"
+    [ "$mtime" == "" ] && mtime="00:00"
+    [ "$wind_d" == "" ] && wind_d="$ZERO (N)"
+    [ "$wind_s" == "0" ] && wind_s="$NODATA"
+    [ "$wind_g" == "0" ] && wind_g="$NODATA"
+    [ "$visib" == "" ] && visib="$ZERO"
+    [ "$temp" == "" ] && temp="$ZERO"
+    [ "$dew_p" == "" ] && dew_p="$ZERO"
+    [ "$pres" == "" ] && pres="$ZERO"
+    [ "$humi" == "" ] && humi="$ZERO%"
+    [ "$cloud" == "" ] && cloud="$NODATA"
+    [ "$weath" == "" ] && weath="$NODATA"
+
+    printf "$NAME pattern ($AIRPORT) in $W_BASE data.\n"
+    printf "Station       : %s \n" "$station"
+    printf "Day           : %s \n" "$mdate"
+    printf "Time          : %s UTC \n" "$mtime"
+    printf "Wind direction: %s \n" "$wind_d"
+    printf "Wind speed    : %.3s m/s \n" "$wind_s"
+    printf "Wind gust     : %.3s m/s \n" "$wind_g"
+    printf "Visibility    : %.4s km \n" "$visib"
+    printf "Temperature   : %s °C \n" "$temp"
+    printf "Dewpoint      : %s °C \n" "$dew_p"
+    printf "Pressure      : %.3s mm Hg \n" "$pres"
+    printf "Humidity      : %s \n" "$humi"
+    printf "Clouds        : %s \n" "$cloud"
+    printf "Weather       : %s \n" "$weath"
+
+  # echo "Load time $[`date +%s` - $start ] s."
   fi
-  echo ${t%.*}
+
+
 else
-  echo Используйте помощь: --help
+  $HELP
+  exit 1
 fi
