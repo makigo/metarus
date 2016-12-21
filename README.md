@@ -11,4 +11,4 @@ Weather service query script is used NOAA
 
     Примеры:
       metarus -d uuee     Вывод декодированной информации о погоде в Москве.
-      metarus -c ru       Вывод информации о кодах Российских городов.>
+      metarus -c ru       Вывод информации о кодах Российских городов.
