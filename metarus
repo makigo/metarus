@@ -3,7 +3,7 @@
 # Author: iMakhonin aka Makigo
 # Email: <work.makhonin@gmail.com>
 #
-####
+###
 
 NAME="Metarus"
 APPNAME="metarus"
@@ -79,7 +79,7 @@ elif [ "$1" == "-c" ] || [ "$1" == "--city" ] && [ ! -z "$2" ]; then
 
 
 elif [ "$1" == "-a" ] || [ "$1" == "--all" ] && [ ! -z "$2" ]; then
-  AIRPORT=`echo "$2" | sed 's/[[:lower:]]/\u&/g'`
+  AIRPORT=`echo "$2" | awk '{print toupper($0)}'`
   pattern=`wget -q -O- $NOAAURL/$DECODED/$AIRPORT.TXT`
   if [ "$pattern" == "" ]; then
     echo "$ERROR"
@@ -90,7 +90,7 @@ elif [ "$1" == "-a" ] || [ "$1" == "--all" ] && [ ! -z "$2" ]; then
 
 
 elif [ "$1" == "-r" ] || [ "$1" == "--raw" ] && [ ! -z "$2" ]; then
-  AIRPORT=`echo "$2" | sed 's/[[:lower:]]/\u&/g'`
+  AIRPORT=`echo "$2" | awk '{print toupper($0)}'`
   pattern=`wget -q -O- $NOAAURL/$STATION/$AIRPORT.TXT`
   if [ "$pattern" == "" ]; then
     echo "$ERROR"
@@ -101,7 +101,7 @@ elif [ "$1" == "-r" ] || [ "$1" == "--raw" ] && [ ! -z "$2" ]; then
 
 
 elif [ "$1" == "-T" ] || [ "$1" == "--trend" ] && [ ! -z "$2" ]; then
-  AIRPORT=`echo "$2" | sed 's/[[:lower:]]/\u&/g'`
+  AIRPORT=`echo "$2" | awk '{print toupper($0)}'`
   pattern=`wget -q -O- $NOAAURL/$TREND/$AIRPORT.TREND`
   if [ "$pattern" == "" ]; then
     echo "$ERROR"
@@ -112,7 +112,7 @@ elif [ "$1" == "-T" ] || [ "$1" == "--trend" ] && [ ! -z "$2" ]; then
 
 
 elif [ "$1" == "-t" ] || [ "$1" == "--temp" ] && [ ! -z "$2" ]; then
-  AIRPORT=`echo "$2" | sed 's/[[:lower:]]/\u&/g'`
+  AIRPORT=`echo "$2" | awk '{print toupper($0)}'`
   pattern=`wget -q -O- $NOAAURL/$DECODED/$AIRPORT.TXT`
   if [ "$pattern" == "" ]; then
     echo "$ERROR"
@@ -123,7 +123,7 @@ elif [ "$1" == "-t" ] || [ "$1" == "--temp" ] && [ ! -z "$2" ]; then
 
 
 elif [ "$1" == "-d" ] || [ "$1" == "--decode" ] && [ ! -z "$2" ]; then
-  AIRPORT=`echo "$2" | sed 's/[[:lower:]]/\u&/g'`
+  AIRPORT=`echo "$2" | awk '{print toupper($0)}'`
   pattern=`wget -q -O- $NOAAURL/$DECODED/$AIRPORT.TXT`
 
   if [ "$pattern" == "" ]; then
