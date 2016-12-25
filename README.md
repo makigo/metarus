@@ -28,7 +28,7 @@ Weather service query script is used NOAA
     UNOO - Omsk		        UWOO - Orenburg	        UWPP - Penza
     USPP - Perm'		    UHPP - Petropavlovsk	UERP - Polyarny
     URRR - Rostov-Na-Donu	UWWW - Samara		    UWSS - Saratov
-    ULLI - St. Peterburg	URMT - Stavropol	    USRR - Surgut;
+    ULLI - St. Peterburg	URMT - Stavropol	    USRR - Surgut
     UUYY - Syktyvkar	    UEST - Tiksi		    UUEM - Tver'
     UWUU - Ufa		        UIUU - Ulan-Ude	        UWLW - Ulyanovsk
     ULOL - Velikie Luki	    UHWW - Vladivostok	    URWW - Volgograd
