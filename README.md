@@ -42,5 +42,5 @@ Run "metarus --help"
 Done
 
 ### Contacts
-Email <igor.makhonin@gmail.com>
+Email <work.makhonin@gmail.com>
 
