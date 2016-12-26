@@ -44,17 +44,7 @@ Decoded data from NOAA station (UUWW)
     Clouds        : mostly cloudy 
     Weather       : light snow 
   
-Checking dependencies  
-
-    Server ~ # metarus -D
-    Checking depends Metarus...
-    ---------------------------
-       OK: curl	 found
-       OK: awk	 found
-       OK: cut	 found
-       OK: sed	 found
-  
-Code - City  
+Code - City (Russia) 
 
     Server ~ # metarus -c ru
     RUSSIA: 
@@ -77,6 +67,17 @@ Code - City
         UWUU - Ufa		        UIUU - Ulan-Ude	        UWLW - Ulyanovsk
         ULOL - Velikie Luki	    UHWW - Vladivostok	    URWW - Volgograd
         ULWW - Vologda		    UUOO - Voronez		    UHSS - Yuzhno-Sakhalinsk
+
+Checking dependencies  
+
+    Server ~ # metarus -D
+    Checking depends Metarus...
+    ---------------------------
+       OK: curl	 found
+       OK: awk	 found
+       OK: cut	 found
+       OK: sed	 found
+  
 
 ### Contact
 Email <work.makhonin@gmail.com>
