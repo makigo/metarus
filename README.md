@@ -3,7 +3,7 @@ Weather service query script is used NOAA
 
 It works on Linux/macOS/OpenWRT
 
-    Использование:
+    Команды на выбор:
       -t,  --temp=code    Только темперетура.
       -d,  --decode=code  Декодированные данные.
       -c,  --city=ru      Список доступных городов в соответствии с кодами.
