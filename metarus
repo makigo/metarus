@@ -16,13 +16,25 @@ NOAAURL="http://tgftp.nws.noaa.gov/data/observations/metar"
 STATION="stations"
 DECODED="decoded"
 TREND="trend"
-NOAAURL_NEW="http://weather.noaa.gov/weather/current/"
 ERROR="$NAME pattern not found in $W_BASE data."
 HELP="echo Используйте помощь: --help"
 SORRY="echo -e Извините, но остальные города пока не внесены в базу кодов.\nЕсли вы знаете код города, введите его используя \"$APPNAME -d code\""
 NODATA="---"
 ZERO="0"
+dep_1=wget
+dep_2=curl
+dep_3=awk
+dep_4=cut
+dep_5=sed
 
+
+depends() {
+  check=`whereis $dep_2 | awk '{print $2}'`
+  if [ "$check" == "" ]; then
+    echo " * For correct work $NAME please install \"$dep_2\""
+    exit 1
+  fi
+}
 
 if [ "$1" == "-h" ] || [ "$1" == "--help" ] && [ -z "$2" ]; then
   echo "$NAME v$VERSION, программа получения погодных данных в России по сети."
@@ -79,6 +91,7 @@ elif [ "$1" == "-c" ] || [ "$1" == "--city" ] && [ ! -z "$2" ]; then
 
 
 elif [ "$1" == "-a" ] || [ "$1" == "--all" ] && [ ! -z "$2" ]; then
+  depends
   AIRPORT=`echo "$2" | awk '{print toupper($0)}'`
   pattern=`curl -s $NOAAURL/$DECODED/$AIRPORT.TXT`
   #pattern=`wget -q -O- $NOAAURL/$DECODED/$AIRPORT.TXT`
@@ -92,6 +105,7 @@ elif [ "$1" == "-a" ] || [ "$1" == "--all" ] && [ ! -z "$2" ]; then
 
 
 elif [ "$1" == "-r" ] || [ "$1" == "--raw" ] && [ ! -z "$2" ]; then
+  depends
   AIRPORT=`echo "$2" | awk '{print toupper($0)}'`
   pattern=`curl -s $NOAAURL/$STATION/$AIRPORT.TXT`
   #pattern=`wget -q -O- $NOAAURL/$STATION/$AIRPORT.TXT`
@@ -105,6 +119,7 @@ elif [ "$1" == "-r" ] || [ "$1" == "--raw" ] && [ ! -z "$2" ]; then
 
 
 elif [ "$1" == "-T" ] || [ "$1" == "--trend" ] && [ ! -z "$2" ]; then
+  depends
   AIRPORT=`echo "$2" | awk '{print toupper($0)}'`
   pattern=`curl -s $NOAAURL/$TREND/$AIRPORT.TREND`
   #pattern=`wget -q -O- $NOAAURL/$TREND/$AIRPORT.TREND`
@@ -118,6 +133,7 @@ elif [ "$1" == "-T" ] || [ "$1" == "--trend" ] && [ ! -z "$2" ]; then
 
 
 elif [ "$1" == "-t" ] || [ "$1" == "--temp" ] && [ ! -z "$2" ]; then
+  depends
   AIRPORT=`echo "$2" | awk '{print toupper($0)}'`
   pattern=`curl -s $NOAAURL/$DECODED/$AIRPORT.TXT`
   #pattern=`wget -q -O- $NOAAURL/$DECODED/$AIRPORT.TXT`
@@ -131,6 +147,7 @@ elif [ "$1" == "-t" ] || [ "$1" == "--temp" ] && [ ! -z "$2" ]; then
 
 
 elif [ "$1" == "-d" ] || [ "$1" == "--decode" ] && [ ! -z "$2" ]; then
+  depends
   AIRPORT=`echo "$2" | awk '{print toupper($0)}'`
   pattern=`curl -s $NOAAURL/$DECODED/$AIRPORT.TXT`
   #pattern=`wget -q -O- $NOAAURL/$DECODED/$AIRPORT.TXT`
@@ -186,7 +203,7 @@ elif [ "$1" == "-d" ] || [ "$1" == "--decode" ] && [ ! -z "$2" ]; then
     printf "Humidity      : %s \n"         "$humi"
     printf "Clouds        : %s \n"         "$cloud"
     printf "Weather       : %s \n"         "$weath"
-  # eсho "Load time $[`date +%s` - $start ] s."
+  # echo "Load time $[`date +%s` - $start ] s."
   fi
 
 
