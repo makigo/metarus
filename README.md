@@ -3,6 +3,8 @@ Weather service query script is used NOAA
 
 It works on Linux/macOS/OpenWRT
 
+    Использование: metarus [КЛЮЧ]... [CODE]...
+    
     Команды на выбор:
       -t,  --temp=code    Только темперетура.
       -d,  --decode=code  Декодированные данные.
@@ -41,6 +43,25 @@ It works on Linux/macOS/OpenWRT
 Copy Metarus to /usr/local/bin  
 Run "metarus --help"  
 Done
+
+### Example
+Decoded data from NOAA station (UUWW)
+
+    Server ~ # metarus -d uuww
+    Metarus pattern (UUWW) in NOAA data.
+    Station       : Moscow / Vnukovo , Russia  
+    Day           : Dec 26, 2016  
+    Time          : 19:30 UTC 
+    Wind direction: 220° (SW) 
+    Wind speed    : 7.1 m/s 
+    Wind gust     : --- m/s 
+    Visibility    : 1.60 km 
+    Temperature   : 0 °C 
+    Dewpoint      : -1 °C 
+    Pressure      : 751 mm Hg 
+    Humidity      : 92% 
+    Clouds        : mostly cloudy 
+    Weather       : light snow 
 
 ### Contact
 Email <work.makhonin@gmail.com>
