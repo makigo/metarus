@@ -29,7 +29,7 @@ dep_5=sed
 
 
 depends() {
-  check=`whereis $dep_2`
+  check=`whereis $dep_2 | cut -d ":" -f2`
   if [ "$check" == "" ]; then
     echo " * For correct work $NAME please install \"$dep_2\""
     exit 1
