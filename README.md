@@ -36,7 +36,7 @@ It works on Linux and macOS
     ULOL - Velikie Luki	    UHWW - Vladivostok	    URWW - Volgograd
     ULWW - Vologda		    UUOO - Voronez		    UHSS - Yuzhno-Sakhalinsk
 
-# Install
+### Install
 Copy Metarus to /usr/local/bin
 Run "metarus --help"
 Done
