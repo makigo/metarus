@@ -86,7 +86,7 @@ elif [ "$1" == "-a" ] || [ "$1" == "--all" ] && [ ! -z "$2" ]; then
     echo "$ERROR"
     exit 1
   else
-  	curl -s $NOAAURL/$DECODED/$AIRPORT.TXT
+    curl -s $NOAAURL/$DECODED/$AIRPORT.TXT
     #wget -q -O- $NOAAURL/$DECODED/$AIRPORT.TXT
   fi
 
@@ -99,7 +99,7 @@ elif [ "$1" == "-r" ] || [ "$1" == "--raw" ] && [ ! -z "$2" ]; then
     echo "$ERROR"
     exit 1
   else
-  	curl -s $NOAAURL/$STATION/$AIRPORT.TXT | grep $AIRPORT
+    curl -s $NOAAURL/$STATION/$AIRPORT.TXT | grep $AIRPORT
     #wget -q -O- $NOAAURL/$STATION/$AIRPORT.TXT | grep $AIRPORT
   fi
 
@@ -112,7 +112,7 @@ elif [ "$1" == "-T" ] || [ "$1" == "--trend" ] && [ ! -z "$2" ]; then
     echo "$ERROR"
     exit 1
   else
-  	curl -s $NOAAURL/$TREND/$AIRPORT.TREND
+    curl -s $NOAAURL/$TREND/$AIRPORT.TREND
     #wget -q -O- $NOAAURL/$TREND/$AIRPORT.TREND
   fi
 
@@ -125,7 +125,7 @@ elif [ "$1" == "-t" ] || [ "$1" == "--temp" ] && [ ! -z "$2" ]; then
     echo "$ERROR"
     exit 1
   else
-  	curl -s $NOAAURL/$DECODED/$AIRPORT.TXT | awk -F" " '/Temperature/ {print $4}' | sed 's/(//g'
+    curl -s $NOAAURL/$DECODED/$AIRPORT.TXT | awk -F" " '/Temperature/ {print $4}' | sed 's/(//g'
     #wget -q -O- $NOAAURL/$DECODED/$AIRPORT.TXT | awk -F" " '/Temperature/ {print $4}' | sed 's/(//g'
   fi
 
@@ -140,7 +140,7 @@ elif [ "$1" == "-d" ] || [ "$1" == "--decode" ] && [ ! -z "$2" ]; then
     exit 1
   else
   # start=`date +%s`
-  	curl -s -o /tmp/$AIRPORT.TXT $NOAAURL/$DECODED/$AIRPORT.TXT
+    curl -s -o /tmp/$AIRPORT.TXT $NOAAURL/$DECODED/$AIRPORT.TXT
     #wget -q -O /tmp/$AIRPORT.TXT $NOAAURL/$DECODED/$AIRPORT.TXT
     d="cat /tmp/$AIRPORT.TXT"
     station=`exec $d | sed -n "1p" | cut -d "(" -f1`
