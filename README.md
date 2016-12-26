@@ -1,7 +1,7 @@
 # metarus
 Weather service query script is used NOAA
 
-Work on Linux and macOS
+It works on linux and macOS
 
     Использование:
       -t,  --temp=code    Только темперетура.
