@@ -65,5 +65,16 @@ Decoded data from NOAA station (UUWW)
     Clouds        : mostly cloudy 
     Weather       : light snow 
 
+
+Checking dependencies  
+
+    Server ~ # metarus -D
+    Checking depends Metarus...
+    ---------------------------
+       OK: curl	 found
+       OK: awk	 found
+       OK: cut	 found
+       OK: sed	 found
+
 ### Contact
 Email <work.makhonin@gmail.com>
