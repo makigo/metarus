@@ -3,6 +3,8 @@ Weather service query script is used NOAA
 
 It works on Linux/macOS/OpenWRT
 
+### Help
+
     Использование: metarus [КЛЮЧ]... [CODE]...
     
     Команды на выбор:
