@@ -40,3 +40,7 @@ It works on Linux and macOS
 Copy Metarus to /usr/local/bin  
 Run "metarus --help"  
 Done
+
+### Contacts
+Email <igor.makhonin@gmail.com>
+
