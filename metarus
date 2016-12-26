@@ -8,7 +8,7 @@
 NAME="Metarus"
 APPNAME="metarus"
 AUTHOR="Igor Makhonin"
-VERSION="2.0.2"
+VERSION="2.0.3"
 RELEASE="26.12.2016"
 EMAIL="work.makhonin@gmail.com"
 W_BASE="NOAA"
@@ -21,32 +21,63 @@ HELP="echo Используйте помощь: --help"
 SORRY="echo -e Извините, но остальные города пока не внесены в базу кодов.\nЕсли вы знаете код города, введите его используя \"$APPNAME -d code\""
 NODATA="---"
 ZERO="0"
-dep_1=wget
+#dep_1=wget
 dep_2=curl
 dep_3=awk
 dep_4=cut
 dep_5=sed
 
 
+read_file() {
+egrep -o -e '^[^ ]+ ? ' -e '[a-zA-Z0-9]+' "$1" | sort -u | {
+    while read line
+    do
+        if type $line &>/dev/null
+        then
+            echo "   OK: $line found"
+        else
+            echo "Error: $line not found"
+        fi
+    done
+  } | sort
+}
+
+
+check() {
+for deps in $dep_1 $dep_2 $dep_3 $dep_4 $dep_5
+do
+    if type $deps &>/dev/null
+    then
+        echo -e "   OK: $deps\t found"
+    else
+        stop=$deps
+        echo -e "Error: $deps\t not found"
+    fi
+done
+}
+
+
 depends() {
-  check=`whereis $dep_2 | cut -d ":" -f2`
-  if [ "$check" == "" ]; then
-    echo " * For correct work $NAME please install \"$dep_2\""
+  check &>/dev/null
+  if [ "$stop" != "" ]; then
+    echo -e "To work correctly you need to install all missing depends.\nUse command: $APPNAME -D (Check depends)"
     exit 1
   fi
 }
+
 
 if [ "$1" == "-h" ] || [ "$1" == "--help" ] && [ -z "$2" ]; then
   echo "$NAME v$VERSION, программа получения погодных данных в России по сети."
   echo "Использование: $APPNAME [КЛЮЧ]... [CODE]..."
   echo
-  echo "  Использование:"
+  echo "  Команды на выбор:"
   echo "  -t,  --temp=code    Только темперетура."
   echo "  -d,  --decode=code  Декодированные данные."
   echo "  -c,  --city=ru      Список доступных городов в соответствии с кодами."
+  echo "  -D,  --depends      Проверитьвсе зависимости $NAME"
   echo
-  echo "       --help         Показать эту справку и выйти."
-  echo "       --version      Показать информацию о версии и выйти."
+  echo "  -h,  --help         Показать эту справку и выйти."
+  echo "  -v,  --version      Показать информацию о версии и выйти."
   echo
   echo "  Примеры:"
   echo "  $APPNAME -d uuee     Вывод декодированной информации о погоде в Москве."
@@ -58,6 +89,13 @@ if [ "$1" == "-h" ] || [ "$1" == "--help" ] && [ -z "$2" ]; then
 
 elif [ "$1" == "-v" ] || [ "$1" == "--version" ] && [ -z "$2" ]; then
   echo "Версия: $VERSION, дата релиза: $RELEASE"
+  exit 1
+
+
+elif [ "$1" == "-D" ] || [ "$1" == "--depends" ] && [  -z "$2" ]; then
+  echo "Checking depends $NAME..."
+  echo "---------------------------"
+  check
   exit 1
 
 
