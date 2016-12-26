@@ -1,7 +1,12 @@
 # metarus
-Weather service query script is used NOAA
+## Weather service query script is used NOAA
 
 It works on Linux/macOS/OpenWRT
+
+### Install
+Copy Metarus to /usr/local/bin  
+Run "metarus --help"  
+Done
 
 ### Help
 
@@ -20,11 +25,6 @@ It works on Linux/macOS/OpenWRT
       metarus -d uuee     Вывод декодированной информации о погоде в Москве.
       metarus -c ru       Вывод информации о кодах Российских городов.
   
-### Install
-Copy Metarus to /usr/local/bin  
-Run "metarus --help"  
-Done
-
 ### Examples
 Decoded data from NOAA station (UUWW)
 
