@@ -1,5 +1,6 @@
 # metarus
 Weather service query script is used NOAA
+
 Work on Linux and macOS
 
     Использование:
