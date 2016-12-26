@@ -40,7 +40,10 @@ It works on Linux and macOS
 Copy Metarus to /usr/local/bin  
 Run "metarus --help"  
 Done
+<<<<<<< HEAD
 
 ### Contacts
 Email <work.makhonin@gmail.com>
 
+=======
+>>>>>>> parent of 995b66a... Update README.md
