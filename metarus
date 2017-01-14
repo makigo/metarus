@@ -8,8 +8,8 @@
 NAME="Metarus"
 APPNAME="metarus"
 AUTHOR="Igor Makhonin"
-VERSION="2.0.3"
-RELEASE="26.12.2016"
+VERSION="2.0.4"
+RELEASE="14.01.2017"
 EMAIL="work.makhonin@gmail.com"
 W_BASE="NOAA"
 NOAAURL="http://tgftp.nws.noaa.gov/data/observations/metar"
@@ -17,8 +17,8 @@ STATION="stations"
 DECODED="decoded"
 TREND="trend"
 ERROR="$NAME pattern not found in $W_BASE data."
-HELP="echo Используйте помощь: --help"
-SORRY="echo -e Извините, но остальные города пока не внесены в базу кодов.\nЕсли вы знаете код города, введите его используя \"$APPNAME -d code\""
+HELP="echo Usage: --help"
+SORRY="echo -e Sorry, but the rest of the city is not included in the code base.\nIf you know the area code, enter it using \"$APPNAME -d code\""
 NODATA="---"
 ZERO="0"
 #dep_1=wget
@@ -67,28 +67,28 @@ depends() {
 
 
 if [ "$1" == "-h" ] || [ "$1" == "--help" ] && [ -z "$2" ]; then
-  echo "$NAME v$VERSION, программа получения погодных данных в России по сети."
-  echo "Использование: $APPNAME [КЛЮЧ]... [CODE]..."
+  echo "$NAME v$VERSION, program is receiving weather data over the network."
+  echo "Usage: $APPNAME [KEY]... [CODE]..."
   echo
-  echo "  Команды на выбор:"
-  echo "  -t,  --temp=code    Только темперетура."
-  echo "  -d,  --decode=code  Декодированные данные."
-  echo "  -c,  --city=ru      Список доступных городов в соответствии с кодами."
-  echo "  -D,  --depends      Проверить все зависимости $NAME"
+  echo "  Commands:"
+  echo "  -t,  --temp=code    temperature Only."
+  echo "  -d,  --decode=code  The decoded data."
+  echo "  -c,  --city=ru      The list of available cities in accordance with the codes."
+  echo "  -D,  --depends      Check all dependencies $NAME"
   echo
-  echo "  -h,  --help         Показать эту справку и выйти."
-  echo "  -v,  --version      Показать информацию о версии и выйти."
+  echo "  -h,  --help         Show this help and exit."
+  echo "  -v,  --version      Show version information and exit."
   echo
-  echo "  Примеры:"
-  echo "  $APPNAME -d uuee     Вывод декодированной информации о погоде в Москве."
-  echo "  $APPNAME -c ru       Вывод информации о кодах Российских городов."
+  echo "  Examples:"
+  echo "  $APPNAME -d uuee     Output of decoded information about the weather in Moscow."
+  echo "  $APPNAME -c ru       Show information about the codes of Russian cities."
   echo
-  echo "Об ошибках в «$APPNAME» сообщайте по адресу <$EMAIL>"
+  echo "Errors in the «$APPNAME»  tell to <$EMAIL>"
   exit 1
 
 
 elif [ "$1" == "-v" ] || [ "$1" == "--version" ] && [ -z "$2" ]; then
-  echo "Версия: $VERSION, дата релиза: $RELEASE"
+  echo "version: $VERSION, release: $RELEASE"
   exit 1
 
 
