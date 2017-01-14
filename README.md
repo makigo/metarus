@@ -10,20 +10,20 @@ Done
 
 ### Help
 
-    Использование: metarus [КЛЮЧ]... [CODE]...
+    Usage: metarus [KEY]... [CODE]...
     
-    Команды на выбор:
-      -t,  --temp=code    Только темперетура.
-      -d,  --decode=code  Декодированные данные.
-      -c,  --city=ru      Список доступных городов в соответствии с кодами.
-      -D,  --depends      Проверить все зависимости Metarus.
+    Commands:
+      -t,  --temp=code    temperature Only.
+      -d,  --decode=code  The decoded data.
+      -c,  --city=ru      The list of available cities in accordance with the codes.
+      -D,  --depends      Check all dependencies Metarus.
 
-      -h,  --help         Показать эту справку и выйти.
-      -v,  --version      Показать информацию о версии и выйти.
+      -h,  --help         Show this help and exit.
+      -v,  --version      Show version information and exit.
 
-    Примеры:
-      metarus -d uuee     Вывод декодированной информации о погоде в Москве.
-      metarus -c ru       Вывод информации о кодах Российских городов.
+    Examples:
+      metarus -d uuee     Output of decoded information about the weather in Moscow.
+      metarus -c ru       Show information about the codes of Russian cities.
   
 ### Examples
 Decoded data from NOAA station (UUWW)
