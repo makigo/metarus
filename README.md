@@ -48,9 +48,9 @@ Code - City (Russia)
 
     Server ~ # metarus -c ru
     RUSSIA: 
-        UNAA - Abakan		    URSS - Adler            UHMA - Anadyr
-        URKA - Anapa		    ULAA - Arhangel'Sk	    URWA - Astrakhan
-        UNBB - Barnaul		    UIBB - Irkutsk          UUBP - Brjansk
+        UNAA - Abakan           URSS - Adler            UHMA - Anadyr
+        URKA - Anapa            ULAA - Arhangel'Sk	    URWA - Astrakhan
+        UNBB - Barnaul          UIBB - Irkutsk          UUBP - Brjansk
         USCC - Chelyabinsk      UIAA - Chita		    UELL - Cul'Man
         USSS - Ekaterinburg     URWI - Elista		    UHHH - Habarovsk
         USHH - Hanty-Mansijsk	UIII - Irkutsk		    UEEE - Jakutsk
