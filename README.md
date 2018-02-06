@@ -50,13 +50,13 @@ Code - City (Russia)
     RUSSIA: 
         UNAA - Abakan		    URSS - Adler            UHMA - Anadyr
         URKA - Anapa		    ULAA - Arhangel'Sk	    URWA - Astrakhan
-        UNBB - Barnaul		    UIBB - Irkutsk		    UUBP - Brjansk
-        USCC - Chelyabinsk	    UIAA - Chita		    UELL - Cul'Man
-        USSS - Ekaterinburg	    URWI - Elista		    UHHH - Habarovsk
+        UNBB - Barnaul		    UIBB - Irkutsk          UUBP - Brjansk
+        USCC - Chelyabinsk      UIAA - Chita		    UELL - Cul'Man
+        USSS - Ekaterinburg     URWI - Elista		    UHHH - Habarovsk
         USHH - Hanty-Mansijsk	UIII - Irkutsk		    UEEE - Jakutsk
-        UMKK - Kaliningrad	    UWKD - Kazan'		    UNEE - Kemerovo
-        URKK - Krasnodar	    UHMM - Magadan		    URMM - Mineral'Nye Vody
-        UERR - Mirny		    UUDD - Msk/Domodedovo	UUEE - Msk/Sheremet'Ye
+        UMKK - Kaliningrad      UWKD - Kazan'		    UNEE - Kemerovo
+        URKK - Krasnodar        UHMM - Magadan		    URMM - Mineral'Nye Vody
+        UERR - Mirny            UUDD - Msk/Domodedovo	UUEE - Msk/Sheremet'Ye
         UUWW - Moscow/Vnukovo	ULMM - Murmansk	        URMN - Nalchik
         USNN - Nizhnevartovsk	UWGG - Nizhny Novgorod	UNWW - Novokuznetsk
         UNOO - Omsk		        UWOO - Orenburg	        UWPP - Penza
